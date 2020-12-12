@@ -1,9 +1,7 @@
 # 一、API部分
 
-
 ## session
 
-![1561384761170](C:\Users\llw98\AppData\Roaming\Typora\typora-user-images\1561384761170.png)
 
 1、服务启动从DB拉取session到cache
 
@@ -12,10 +10,7 @@
 3、判断session是否过期
 
 
-
 这里session用sync.map保存
-
-流程
 
 
 
@@ -24,49 +19,48 @@
 main->middleware -> defs(message, err)->handlers->dbops->response
 
 
-
 # 二、stream部分
 
 ## limiter（流控机制
 
-> 1、新建一个ConnLimiter使用chan来控制连接数量
->
-> ```go
-> // 当bucker满的情况下
-> if len(cl.bucket) >= cl.concurrentConn {
->    log.Printf("Reached the rate limitation.")
->    return false
-> }
-> ```
->
-> 2、在主函数中添加一个NewMiddleWareHandle，把limiter校验放到函数中。
->
-> ```go
-> type midelWareHandler struct {
->    r *httprouter.Router
->    l *ConnLimiter
-> }
-> 
-> 
-> func NewMiddleWareHandle(r *httprouter.Router, cc int) http.Handler {
->    m := midelWareHandler{}
->    m.r = r
->    m.l = NewConnLimiter(cc)
->    return m
-> }
-> 
-> func (m  midelWareHandler)ServeHTTP (w http.ResponseWriter, r *http.Request)  {
->    // 判断如果超过流控值
->    if !m.l.GetConn() {
->       sendErrorResponse(w, http.StatusTooManyRequests, "Too Many Requests")
->       return
->    }
-> 
->    m.r.ServeHTTP(w, r)
->    // 释放token
->    defer m.l.ReleaseConn()
-> }
-> ```
+1、新建一个ConnLimiter使用chan来控制连接数量
+
+```go
+// 当bucker满的情况下
+if len(cl.bucket) >= cl.concurrentConn {
+   log.Printf("Reached the rate limitation.")
+   return false
+}
+```
+
+2、在主函数中添加一个NewMiddleWareHandle，把limiter校验放到函数中。
+
+```go
+type midelWareHandler struct {
+   r *httprouter.Router
+   l *ConnLimiter
+}
+
+
+func NewMiddleWareHandle(r *httprouter.Router, cc int) http.Handler {
+   m := midelWareHandler{}
+   m.r = r
+   m.l = NewConnLimiter(cc)
+   return m
+}
+
+func (m  midelWareHandler)ServeHTTP (w http.ResponseWriter, r *http.Request)  {
+   // 判断如果超过流控值
+   if !m.l.GetConn() {
+      sendErrorResponse(w, http.StatusTooManyRequests, "Too Many Requests")
+      return
+   }
+
+   m.r.ServeHTTP(w, r)
+   // 释放token
+   defer m.l.ReleaseConn()
+}
+```
 
 midelWareHandler变成http.Handler需先实现ServeHTTP，这里将判断放到ServeHTTP函数中。
 
@@ -99,18 +93,14 @@ if err := r.ParseMultipartForm(MAX_UPLOAN_SIZE); err != nil{
 
 # 三、schedule(调度程序
 
-> 作用
->
-> - 处理延时操作
->
-> - 处理异步任务
+作用
+- 处理延时操作
+- 处理异步任务
 
-> 结构
->
-> - ReSTful 的 http server(接收任务写道schedule
->
-> - Timer(定时器
-> - 生产者/消费者模型下的task runner
+结构
+- ReSTful 的 http server(接收任务写道schedule
+- Timer(定时器
+- 生产者/消费者模型下的task runner
 
 
 
@@ -124,12 +114,12 @@ st->op->ops
 
 ## 1、runner
 
-> runner.go
->
-> startDispatcher:
->
-> - control	channel（信息交换
-> - data        channel（数据
+runner.go
+
+startDispatcher:
+
+- control	channel（信息交换
+- data        channel（数据
 
 ## 2、task
 
@@ -166,7 +156,7 @@ CREATE TABLE `video_server`.`users`  (
 
 ## video_info视频表:
 
-```go
+```mysql
 CREATE TABLE `video_server`.`video_info`  (
   `id` varchar(64) NOT NULL,
   `author_id` int(10) NULL,
