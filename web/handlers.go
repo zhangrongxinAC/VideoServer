@@ -48,14 +48,14 @@ func userHomeHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	cname, err1 := r.Cookie("username")
 	_, err2 := r.Cookie("session")
 	if err1 != nil || err2 != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound) // 重定向主页
 		return
 	}
 
 	fname := r.FormValue("username")
 	var p *UserPage
 	if len(cname.Value) != 0 {
-		p = &UserPage{Name: cname.Value}
+		p = &UserPage{Name: cname.Value} // 渲染名字
 	} else if len(fname) != 0 {
 		p = &UserPage{Name: fname}
 	}

@@ -10,7 +10,7 @@ type Worker struct {
 }
 
 func NewWorker(interval time.Duration, r *Runner) *Worker {
-	return &Worker {
+	return &Worker{
 		ticker: time.NewTicker(interval * time.Second),
 		runner: r,
 	}
@@ -19,14 +19,14 @@ func NewWorker(interval time.Duration, r *Runner) *Worker {
 func (w *Worker) startWorker() {
 	for {
 		select {
-		case <- w.ticker.C:
+		case <-w.ticker.C: // 时间到了
 			go w.runner.StartAll()
 		}
 	}
 }
 
 func Start() {
-	r:=NewRunner(3, true, VideoClearDispatcher, VideoClearExecutor)
-	w:=NewWorker(3, r)
+	r := NewRunner(3, true, VideoClearDispatcher, VideoClearExecutor)
+	w := NewWorker(3, r)
 	go w.startWorker()
 }
