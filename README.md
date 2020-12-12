@@ -1,9 +1,7 @@
 # 一、API部分
 
-
 ## session
 
-![1561384761170](C:\Users\llw98\AppData\Roaming\Typora\typora-user-images\1561384761170.png)
 
 1、服务启动从DB拉取session到cache
 
@@ -12,17 +10,13 @@
 3、判断session是否过期
 
 
-
 这里session用sync.map保存
-
-流程
 
 
 
 ### api前端部分
 
 main->middleware -> defs(message, err)->handlers->dbops->response
-
 
 
 # 二、stream部分
@@ -166,7 +160,7 @@ CREATE TABLE `video_server`.`users`  (
 
 ## video_info视频表:
 
-```go
+```mysql
 CREATE TABLE `video_server`.`video_info`  (
   `id` varchar(64) NOT NULL,
   `author_id` int(10) NULL,
