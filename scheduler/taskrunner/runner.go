@@ -1,12 +1,14 @@
 package taskrunner
 
+import "fmt"
+
 type Runner struct {
 	Controller controlChan
 	Error      controlChan
 	Data       dataChan
 	dataSize   int
 	longLived  bool // 是否长期存活
-	Dispatcher fn
+	Dispatcher fn   // fn具体函数类型， Dispatcher 类似我们c语言函数指针
 	Executor   fn
 }
 
@@ -34,11 +36,11 @@ func (r *Runner) startDispatch() {
 	for {
 		select {
 		case c := <-r.Controller:
-			if c == READY_TO_DISPATCH {
+			if c == READY_TO_DISPATCH { // 先执行 该流程
 				// 生产者
 				err := r.Dispatcher(r.Data) // 读取任务，实质是通过VideoClearDispatcher函数从数据库读取
 				if err != nil {
-					r.Error <- CLOSE
+					r.Error <- CLOSE // 控制结束
 				} else {
 					r.Controller <- READY_TO_EXECUTE // 通知执行任务
 				}
@@ -48,14 +50,15 @@ func (r *Runner) startDispatch() {
 				// 消费者
 				err := r.Executor(r.Data) // 执行任务，实质是通过VideoClearExecutor 删除视频，并从数据库删除
 				if err != nil {
-					r.Error <- CLOSE
+					r.Error <- CLOSE // 控制结束
 				} else {
 					r.Controller <- READY_TO_DISPATCH // 通知继续读取任务
 				}
 			}
 		case e := <-r.Error: // 和r.Controller独立
 			if e == CLOSE {
-				return
+				fmt.Println("startDispatch finish")
+				return // 控制结束
 			}
 		}
 	}

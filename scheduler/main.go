@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"video_server/scheduler/taskrunner"
 
@@ -16,5 +17,9 @@ func RegisterHandlers() *httprouter.Router {
 func main() {
 	go taskrunner.Start()
 	r := RegisterHandlers()
-	http.ListenAndServe(":10001", r)
+	err := http.ListenAndServe(":10001", r)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("main fnish")
 }

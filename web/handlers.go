@@ -45,7 +45,8 @@ func homeHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func userHomeHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	cname, err1 := r.Cookie("username")
+	log.Println("Header", r.Header)
+	cname, err1 := r.Cookie("username") // 读取cookie的字段
 	_, err2 := r.Cookie("session")
 	if err1 != nil || err2 != nil {
 		http.Redirect(w, r, "/", http.StatusFound) // 重定向主页
@@ -68,6 +69,8 @@ func userHomeHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 }
 
 func apiHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+
+	log.Println("apiHandler Header", r.Header)
 	if r.Method != http.MethodPost {
 		re, _ := json.Marshal(ErrorRequestNotRecognized)
 		io.WriteString(w, string(re))
@@ -87,6 +90,14 @@ func apiHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 func proxyHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	u, _ := url.Parse("http://127.0.0.1:10002/")
+	proxy := httputil.NewSingleHostReverseProxy(u) // 代理
+	proxy.ServeHTTP(w, r)
+}
+
+func createUserProxyHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	// 可以做一个网关，同一个ip不断地去访问，可以直接返回错误
+
+	u, _ := url.Parse("http://127.0.0.1:10000/")   // 直接转发给后端，就不需要web去做解析
 	proxy := httputil.NewSingleHostReverseProxy(u) // 代理
 	proxy.ServeHTTP(w, r)
 }

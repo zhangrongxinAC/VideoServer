@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -29,7 +30,7 @@ func RegisterHandlers() *httprouter.Router {
 func (m middleWareHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// 要测试每个请求的响应时间
 	// 下了锚点
-	if !m.l.GetConn() {
+	if !m.l.GetConn() { // 先做流控检测
 		sendErrorResponse(w, http.StatusTooManyRequests, "Too many requests.")
 		return
 	}
@@ -44,5 +45,9 @@ func (m middleWareHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	r := RegisterHandlers()
 	mh := NewMiddleWareHandler(r, 2)
-	http.ListenAndServe(":10002", mh)
+	err := http.ListenAndServe(":10002", mh)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("main fnish")
 }

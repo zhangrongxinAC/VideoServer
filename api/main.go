@@ -46,5 +46,9 @@ func main() {
 	Prepare()
 	r := RegisterHandlers()
 	mh := NewMiddleWareHandler(r)
-	http.ListenAndServe(":10000", mh)
+	err := http.ListenAndServe(":10000", mh)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("main fnish")
 }

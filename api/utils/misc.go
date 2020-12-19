@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 	// "avenssi"
 )
@@ -25,14 +24,15 @@ func NewUUID() (string, error) {
 }
 
 func GetCurrentTimestampSec() int {
-	ts, _ := strconv.Atoi(strconv.FormatInt(time.Now().UnixNano()/1000000000, 10))
+	// ts, _ := strconv.Atoi(strconv.FormatInt(time.Now().UnixNano()/1000000000, 10))
+	ts := int(time.Now().Unix())
 	return ts
 }
 
 func SendDeleteVideoRequest(id string) {
 	log.Println("id:", id)
 	// addr := config.GetLbAddr() + ":10001"
-	addr := "127.0.0.1:10001"
+	addr := "127.0.0.1:10001" // scheduler的地址
 	url := "http://" + addr + "/video-delete-record/" + id
 	_, err := http.Get(url)
 	if err != nil {

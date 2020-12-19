@@ -30,9 +30,9 @@ func Test_fixedWindowCounter_Take(t *testing.T) {
 					go func() {
 						for range [50]struct{}{} {
 							if err := f.Take(); err != nil {
-								//t.Errorf("Take() error = %v", err)
+								// t.Errorf("Take() error = %v", err)
 							} else {
-								//t.Log(i, "take once request")
+								// t.Log(i, "take once request")
 								count++
 							}
 						}

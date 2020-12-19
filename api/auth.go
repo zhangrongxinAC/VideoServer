@@ -12,6 +12,7 @@ var HEADER_FIELD_UNAME = "X-User-Name"
 
 func validateUserSession(r *http.Request) bool {
 	sid := r.Header.Get(HEADER_FIELD_SESSION) // session什么时候起作用
+	log.Println("validateUserSession sid:", sid)
 	if len(sid) == 0 {
 		return false
 	}

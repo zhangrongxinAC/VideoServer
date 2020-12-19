@@ -1,8 +1,8 @@
 package taskrunner
 
 const (
-	READY_TO_DISPATCH = "d" // 开始生产数据
-	READY_TO_EXECUTE  = "e" // 开始消费数据
+	READY_TO_DISPATCH = "d" // 开始生产数据(任务)
+	READY_TO_EXECUTE  = "e" // 开始消费数据(任务)
 	CLOSE             = "c" // 结束任务
 
 	VIDEO_PATH = "./videos/"

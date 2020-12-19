@@ -148,7 +148,7 @@ func testAddSession(t *testing.T) {
 		t.Errorf("Error of UUID, %v", err)
 	}
 	tempsid = sid
-	ttl := int64(129183174987124)
+	ttl := int64(1607700106) // 2020/12/11 23:21:46
 	err = InsertSession(sid, ttl, "skyone")
 	if err != nil {
 		t.Errorf("Error of InsertSession: %v", err)

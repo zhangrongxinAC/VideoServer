@@ -6,8 +6,10 @@ import (
 
 type ConnLimiter struct {
 	concurrentConn int
-	bucket         chan int
+	bucket         chan int // 即使是计数 也尽量不要用锁，我们用channel
 }
+
+// 比如同时只能提供10个服务，那把channel设置10， go语言协程同步是用channel，而不是 全局变量+锁
 
 func NewConnLimiter(cc int) *ConnLimiter {
 	return &ConnLimiter{

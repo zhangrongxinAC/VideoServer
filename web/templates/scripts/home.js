@@ -232,7 +232,7 @@ function getCookie(cname) {
 
 // DOM operations
 function selectVideo(vid) {
-	var url = 'http://' + window.location.hostname + ':10003/videos/'+ vid
+	var url = 'http://' + window.location.hostname + ':10002/videos/'+ vid
   	var video = $("#curr-video");
   	$("#curr-video:first-child").attr('src', url);
   	$("#curr-video-name").text(currentVideo['name']);
@@ -256,10 +256,13 @@ function refreshComments(vid) {
 		} else {
 			$("#comments-total").text(obj['comments'].length + ' Comments');
 		}
-		obj['comments'].forEach(function(item, index) {
-			var ele = htmlCommentListElement(item['id'], item['author'], item['content']);
-			$("#comments-history").append(ele);
-		});
+		comments = obj['comments']
+		if(comments != null) {
+			obj['comments'].forEach(function(item, index) {
+				var ele = htmlCommentListElement(item['id'], item['author'], item['content']);
+				$("#comments-history").append(ele);
+			});
+		}
 
 	});
 }
@@ -371,9 +374,6 @@ function registerUser(callback) {
 		'method': 'POST',
 		'req_body': JSON.stringify(reqBody)
 	};
-
-
-
 
 	$.ajax({
 		url  : 'http://' + window.location.hostname + ':10003/api',

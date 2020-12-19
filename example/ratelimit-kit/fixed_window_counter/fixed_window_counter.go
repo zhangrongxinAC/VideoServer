@@ -12,7 +12,7 @@ var (
 	once sync.Once
 )
 
-var _ ratelimit_kit.RateLimiter = &fixedWindowCounter{}
+// var _ ratelimit_kit.RateLimiter = &fixedWindowCounter{}
 
 type fixedWindowCounter struct {
 	snippet         time.Duration
@@ -43,5 +43,5 @@ func (l *fixedWindowCounter) Take() error {
 	if !atomic.CompareAndSwapInt32(&l.currentRequests, curRequest, curRequest+1) {
 		return ratelimit_kit.ErrExceededLimit
 	}
-	return nil
+	return nil // 说明是正常的
 }

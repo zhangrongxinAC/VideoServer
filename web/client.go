@@ -21,7 +21,7 @@ func request(b *ApiBody, w http.ResponseWriter, r *http.Request) {
 	log.Printf("request: url:%s -> url:%s", r.URL.Path, b.Url)
 	switch b.Method {
 	case http.MethodGet:
-		req, _ := http.NewRequest("GET", b.Url, nil)
+		req, _ := http.NewRequest("GET", b.Url, nil) // 向 api server
 		req.Header = r.Header
 		resp, err = httpClient.Do(req)
 		if err != nil {
@@ -40,7 +40,7 @@ func request(b *ApiBody, w http.ResponseWriter, r *http.Request) {
 		normalResponse(w, resp)
 	case http.MethodDelete:
 		log.Println("b.Url", b.Url)
-		req, _ := http.NewRequest("Delete", b.Url, nil)
+		req, _ := http.NewRequest("DELETE", b.Url, nil)
 		req.Header = r.Header
 		resp, err = httpClient.Do(req)
 		if err != nil {

@@ -31,7 +31,8 @@ func RegisterHandler() *httprouter.Router {
 	router.POST("/", homeHandler)
 	router.GET("/userhome", userHomeHandler)
 	router.POST("/userhome", userHomeHandler)
-	router.POST("/api", apiHandler)              // api手动转发
+	router.POST("/api", apiHandler) // api手动转发
+	router.POST("/user", createUserProxyHandler)
 	router.POST("/upload/:vid-id", proxyHandler) // 上传文件的时候
 	router.ServeFiles("/statics/*filepath", http.Dir("./templates"))
 	router.ServeFiles("/scripts/*filepath", http.Dir("./templates/scripts"))
@@ -41,5 +42,9 @@ func RegisterHandler() *httprouter.Router {
 func main() {
 	r := RegisterHandler()
 	mh := NewMiddleWareHandler(r)
-	http.ListenAndServe(":10003", mh)
+	err := http.ListenAndServe(":10003", mh)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("main fnish")
 }
