@@ -205,8 +205,12 @@ CREATE TABLE `video_server`.`video_del_rec`  (
 
 # 六、编译
 (1)在video_server目录执行go mod init
+
 go mod init video_server
+
 (2)分别进入 api、scheduler、streamserver、web进行go build生成对应的执行文件
+
+(3)分别在api、scheduler、streamserver、web执行生成的执行文件。
 
 
 
