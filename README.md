@@ -204,8 +204,7 @@ CREATE TABLE `video_server`.`video_del_rec`  (
 ```
 
 # 六、编译
-(0)将代码中需要连接数据库的地方替换为自己数据库的用户名和密码
-   全局搜索 sqlname 即可
+(0)将代码中需要连接数据库的地方替换为自己数据库的用户名和密码(全局搜索 sqlname 即可)
 
 (1)在video_server目录执行go mod init video_server
 
