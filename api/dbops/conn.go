@@ -3,6 +3,7 @@ package dbops
 import (
 	"database/sql"
 	"fmt"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -13,7 +14,7 @@ var (
 
 func init() {
 	fmt.Println("Entering conn.go init function...")
-	dbConn, err = sql.Open("mysql", "root:123456@/video_server?charset=utf8")
+	dbConn, err = sql.Open("mysql", "ubuntu:zrxAC1999&@/video_server?charset=utf8")
 	if err != nil {
 		panic(err.Error())
 	}
